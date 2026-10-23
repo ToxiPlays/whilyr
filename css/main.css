@@ -1,0 +1,290 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    isolation: isolate;
+    color: #ffffff;
+    margin: 0;
+    min-height: 100vh;
+    background-color: #111111;
+    background-attachment: fixed;
+    transition: background 0.35s ease;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: -18%;
+    z-index: -2;
+    pointer-events: none;
+    filter: blur(110px) saturate(1.35) brightness(1.08);
+    opacity: 0.9;
+    transform: scale(1.08);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: rgba(6, 7, 12, 0.12);
+}
+
+.main {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+
+  display: flex;
+  min-height: 90vh;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 1%;
+}
+
+.left {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 32%;
+    position: relative;
+    min-height: 56vh;
+}
+
+.audio-upload-zone,
+.upload-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px dashed rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.audio-upload-zone {
+    width: min(90%, 320px);
+    min-height: 420px;
+}
+
+.upload-zone {
+    width: min(48vw, 560px);
+    min-height: 420px;
+}
+
+.audio-upload-zone:hover,
+.upload-zone:hover,
+.audio-upload-zone.dragover,
+.upload-zone.dragover {
+    border-color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-1px);
+}
+
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem;
+}
+
+.upload-content h3 {
+    margin: 0;
+    font-size: clamp(1.2rem, 1.6vw, 2rem);
+}
+
+.cover-art {
+    width: 80%;
+    max-width: 260px;
+    user-select: none;
+    -webkit-user-select: none;
+    object-fit: cover;
+    border-radius: 0.85rem;
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.cover-art.placeholder {
+    cursor: pointer;
+}
+
+.song-title,
+.song-artist {
+    margin: 0.6rem 0 0;
+    text-align: center;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.song-artist {
+    opacity: 80%;
+    font-size: 1.4em;
+    margin-top: 0.1rem;
+}
+
+.song-title {
+    font-size: 2em;
+}
+
+.song-title[contenteditable="true"],
+.song-artist[contenteditable="true"] {
+    outline: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.3rem;
+    padding: 0.15rem 0.35rem;
+    min-width: 10rem;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min(52vw, 640px);
+    min-height: 60vh;
+}
+
+.lyrics {
+    width: min(48vw, 560px);
+    max-height: 68vh;
+    overflow-y: auto;
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+    font-weight: 700;
+    line-height: 1.5;
+    padding-right: 0.5rem;
+}
+
+.lyrics::-webkit-scrollbar {
+  display: none;
+}
+
+.lyrics:has(.duet-agent) > p {
+    width: 85%;
+}
+
+.lyrics:has(.duet-agent) > p.duet-agent {
+    width: 85%;
+    justify-self: right;
+}
+
+.lyrics > p {
+    margin: 0.3em 0;
+    padding: 0.2em 0.4em;
+    border-radius: 0.4rem;
+    transition: 0.2s ease-in-out, opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    opacity: 0.75;
+    font-size: 2.4vw;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.lyrics > p.word-sync {
+    opacity: 0.75;
+}
+
+.lyrics > p.word-sync.current {
+    opacity: 0.85;
+}
+
+.lyrics > p.word-sync.past {
+    opacity: 0.4;
+}
+
+/* keeps syllables of one word together when the line wraps */
+.lyrics > p.word-sync .word-group {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.lyrics > p.word-sync .bg-line {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+}
+
+.lyrics > p.word-sync .bg-line.revealed {
+    grid-template-rows: 1fr;
+    opacity: 0.8;
+}
+
+.lyrics > p.word-sync .bg-inner {
+    min-height: 0;
+    overflow: hidden;
+    font-size: 0.7em;
+}
+
+.lyrics > p.word-sync .word {
+    display: inline-block;
+    --fill: 0%;
+    /* feather width as a fraction of the word's width: bigger = softer edge */
+    --feather: 0.55;
+    /* The lit stop trails the dim stop by --feather, and both are rescaled so that
+       fill 0% = fully dim and fill 100% = fully lit (the soft edge sweeps fully off the word). */
+    background-image: linear-gradient(90deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 1) calc(var(--fill) * (1 + var(--feather)) - 100% * var(--feather)),
+        rgba(255, 255, 255, 0.45) calc(var(--fill) * (1 + var(--feather))),
+        rgba(255, 255, 255, 0.45) 100%);
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    will-change: transform;
+}
+
+.lyrics > p.duet-agent {
+    text-align: right;
+    margin-left: auto;
+}
+
+.lyrics > p.current:not(.word-sync) {
+    opacity: 1;
+    color: #ffffff;
+}
+
+.lyrics > p.past:not(.word-sync) {
+    opacity: 0.4;
+}
+
+.lyrics > p:hover {
+    --popout: 0.3em;
+    background-color: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    padding: 0.2em 0.45em;
+}
+
+.lyrics > p.duet-agent:hover {
+    padding-left: var(--popout);
+}
+
+.lyrics > p:not(.duet-agent):hover {
+    padding-right: var(--popout);
+}
+
+.buttons {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    gap: 2em;
+    margin-top: 1rem;
+}
+
+.buttons > span {
+    display: block;
+    user-select: none;
+    cursor: pointer;
+    font-size: 2.2rem;
+}
+
+.hidden {
+    display: none !important;
+}

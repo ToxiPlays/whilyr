@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/js/main.js" type="module" defer></script>
+    <script src="https://unpkg.com/color.js@1.2.0/dist/color.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=play_arrow,pause,movie" />
+    <title>lyric prototype</title>
+</head>
+<body>
+    <main class="main">
+        <div class="left">
+            <div id="audioUploadZone" class="audio-upload-zone" role="button" tabindex="0" aria-label="Upload audio file">
+                <input id="audioFileInput" type="file" accept=".mp3,.wav,.flac,.m4a,.aac,.ogg,.opus,.mp4,.aiff,.aif,.webm,audio/*" hidden />
+                <div class="upload-content">
+                    <h3>Upload audio</h3>
+                </div>
+            </div>
+
+            <input id="coverArtFileInput" type="file" accept="image/*" hidden />
+            <img class="cover-art hidden" src="/img/upload_cover.png" alt="Album cover art" />
+            <h2 class="song-title hidden" contenteditable="false">Song Title</h2>
+            <h4 class="song-artist hidden" contenteditable="false">Song Artist</h4>
+            <div class="buttons hidden">
+                <span class="material-symbols-outlined" data-action="play">play_arrow</span>
+                <span class="material-symbols-outlined" data-action="pause">pause</span>
+                <span class="material-symbols-outlined" data-action="lyrics">movie</span>
+            </div>
+        </div>
+
+        <div class="right">
+            <div id="lyricsUploadZone" class="upload-zone" role="button" tabindex="0" aria-label="Upload synced lyric file">
+                <input id="lyricsFileInput" type="file" accept=".ttml,.xml,.srt,.lrc" hidden />
+                <div class="upload-content">
+                    <h3>Import synced lyrics</h3>
+                </div>
+            </div>
+
+            <div id="lyricsContainer" class="lyrics hidden" aria-live="polite"></div>
+        </div>
+    </main>
+</body>
+</html>
