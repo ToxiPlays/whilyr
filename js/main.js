@@ -12,7 +12,7 @@ const songArtist = document.querySelector('.song-artist');
 const buttons = document.querySelector('.buttons');
 
 const TTML_METADATA_NS = 'http://www.w3.org/ns/ttml#metadata';
-const UNKNOWN_COVER_SRC = '../img/unk_cover.jpg';
+const UNKNOWN_COVER_SRC = './img/unk_cover.jpg';
 
 const DEFAULT_BACKGROUND_PALETTE = ['#111111', '#111111', '#111111'];
 
