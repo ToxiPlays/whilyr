@@ -1,7 +1,3 @@
-// Offline lyric-video renderer.
-// Decodes the audio, draws every frame to a canvas at a fixed timestamp (no real-time
-// playback), encodes H.264 video and AAC audio with WebCodecs, and muxes to MP4.
-
 const MUXER_URL = 'https://cdn.jsdelivr.net/npm/mp4-muxer@5.1.0/build/mp4-muxer.mjs';
 
 const WIDTH = 1280;
@@ -69,14 +65,13 @@ export function canExportVideo() {
         && typeof OfflineAudioContext !== 'undefined';
 }
 
-// "Render | [Title] - [Artist].mp4" with characters that break file names removed.
 export function buildRenderFileName(title, artist) {
     const clean = (value, fallback) => String(value ?? '')
         .replace(/[\\/:*?"<>|]/g, '')
         .replace(/\s+/g, ' ')
         .trim() || fallback;
 
-    return `Render | ${clean(title, 'Untitled')} - ${clean(artist, 'Unknown Artist')}.mp4`;
+    return `Whilyr | ${clean(title, 'Untitled')} - ${clean(artist, 'Unknown Artist')}.mp4`;
 }
 
 export async function exportLyricVideo({ audioUrl, lyricElements, palette, coverImage, title, artist, onProgress = () => {} }) {
